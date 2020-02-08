@@ -9,6 +9,7 @@ import (
 
 func NewRouter() *gin.Engine {
 	r := gin.New()
+	r.Use(gin.Logger())
 	r.Use(middlewares.CORSMiddleware())
 	r.Use(middlewares.ApiMiddleware())
 	v1 := r.Group("/v1")
