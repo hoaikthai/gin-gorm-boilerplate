@@ -19,7 +19,8 @@ func Init() {
 	username := config.GetString("db.username")
 	password := config.GetString("db.password")
 	dbname := config.GetString("db.database")
-	db, err := gorm.Open("postgres", "host="+host+" port="+port+" user="+username+" dbname="+dbname+" password="+password+" sslmode=disable")
+	sslmode := config.GetString("db.sslmode")
+	db, err := gorm.Open("postgres", "host="+host+" port="+port+" user="+username+" dbname="+dbname+" password="+password+" sslmode="+sslmode)
 	if err != nil {
 		log.Fatal(err)
 	}
