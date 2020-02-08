@@ -1,16 +1,19 @@
 package server
 
 import (
-	auth_routes "gin-gorm-boilerplate/app/auth"
+	auth "gin-gorm-boilerplate/app/auth"
+	"gin-gorm-boilerplate/middlewares"
 
 	"github.com/gin-gonic/gin"
 )
 
 func NewRouter() *gin.Engine {
 	r := gin.New()
+	r.Use(middlewares.CORSMiddleware())
+	r.Use(middlewares.ApiMiddleware())
 	v1 := r.Group("/v1")
 	{
-		auth_routes.NewRouter(v1)
+		auth.NewRouter(v1)
 	}
 	return r
 }
