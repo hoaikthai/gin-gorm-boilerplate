@@ -2,9 +2,11 @@ package db
 
 import (
 	"gin-gorm-boilerplate/config"
+	repo "gin-gorm-boilerplate/db/repositories"
 	"log"
 
 	"github.com/jinzhu/gorm"
+	_ "github.com/jinzhu/gorm/dialects/postgres"
 )
 
 var db *gorm.DB
@@ -16,12 +18,15 @@ func Init() {
 	port := config.GetString("db.port")
 	username := config.GetString("db.username")
 	password := config.GetString("db.password")
-	dbname := config.GetString("db.dbname")
-	db, err := gorm.Open("postgres", "host="+host+"port="+port+"user="+username+"dbname="+dbname+"password="+password)
+	dbname := config.GetString("db.database")
+	db, err := gorm.Open("postgres", "host="+host+" port="+port+" user="+username+" dbname="+dbname+" password="+password+" sslmode=disable")
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer db.Close()
+	db.AutoMigrate(
+		&repo.User{},
+	)
 }
 
 // GetDB returns db object
