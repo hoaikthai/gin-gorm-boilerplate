@@ -5,7 +5,7 @@ import (
 )
 
 func NewRouter(r *gin.RouterGroup) {
-	controller := new(Controller)
+	var controller IAuthService = new(AuthController)
 	authGroup := r.Group("/auth")
 	{
 		authGroup.POST("/signup", controller.SignUp)

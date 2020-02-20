@@ -13,6 +13,14 @@ var db *gorm.DB
 
 // Init database from config with postgres
 func Init() {
+	db = connectDB()
+	defer db.Close()
+	db.AutoMigrate(
+		&repo.User{},
+	)
+}
+
+func connectDB() *gorm.DB {
 	config := config.GetConfig()
 	host := config.GetString("db.host")
 	port := config.GetString("db.port")
@@ -24,13 +32,13 @@ func Init() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer db.Close()
-	db.AutoMigrate(
-		&repo.User{},
-	)
+	return db
 }
 
 // GetDB returns db object
 func GetDB() *gorm.DB {
+	if err := db.DB().Ping(); err != nil {
+		db = connectDB()
+	}
 	return db
 }
